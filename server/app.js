@@ -1,25 +1,24 @@
-var express = require("express");
-var morgan = require("morgan");
-var bodyParser = require("body-parser");
-var path = require("path");
+const express = require("express");
+// var morgan = require("morgan");
+const bodyParser = require("body-parser");
+const path = require("path");
 
-var db = require("../models").db;
+const db = require("../models").db;
+const router = require('../routes');
 
-var app = express();
+
+const app = express();
 
 // logging and body-parsing
-app.use(morgan);
+// app.use(morgan);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // static file-serving middleware
-//app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.get('/', function(req, res, next){
-  console.log('called')
-  res.send('hello')
-})
+app.use('/', router);
 
 // failure to catch req above means 404, forward to error handler
 app.use(function(req, res, next) {
