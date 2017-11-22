@@ -536,6 +536,7 @@ module.exports={"$version":8,"$root":{"version":{"required":true,"type":"enum","
 
 const mapboxgl = __webpack_require__(0);
 const buildMarker = __webpack_require__(3);
+const requestData = __webpack_require__(4);
 
 mapboxgl.accessToken = "pk.eyJ1IjoiZGFydGhqYWNlbiIsImEiOiJjamE5dDN1dGEwYW55MzJ0ZWx0enVyaGpvIn0.s8G-avL9HwyLv0_FjKymgA";
 
@@ -551,6 +552,36 @@ const map = new mapboxgl.Map({
 
 const marker = buildMarker("activities", fullstackCoords);
 marker.addTo(map);
+
+const attractionsData = requestData()
+// attractionsData
+// .then(data => {
+//   console.log(data.hotels)
+// })
+// .catch(next)
+
+const hotelsSelect = document.getElementById('hotels-choices')
+
+hotelsSelect.addEventListener('click', function(){
+  while (this.firstChild) {
+    this.removeChild(this.firstChild);
+  }
+  attractionsData
+    .then(data => {
+      console.log(data.hotels)
+      data.hotels.forEach(elem => {
+      addSelect.call(this, elem)
+    })
+  })
+})
+
+
+function addSelect(data){
+  const opts = document.createElement('option')
+  opts.value = data.name
+  opts.innerText = data.name
+  this.appendChild(opts)
+}
 
 
 /***/ }),
@@ -605,6 +636,23 @@ const buildMarker = (type, coords) => {
 };
 
 module.exports = buildMarker;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+
+module.exports = function() {
+
+return fetch('/api')
+  .then(result => result.json())
+  .then(data => {
+    return data
+  })
+  .catch(console.error)
+
+}
 
 
 /***/ })
